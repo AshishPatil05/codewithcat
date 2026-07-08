@@ -1,32 +1,146 @@
 {% extends "base.html" %}
-{% block title %}Notes - Code With Cat{% endblock title %}
+{% block title %}My Notes - Code With Cat{% endblock title %}
 
 {% block body %}
-<section class="hero" style="padding:80px 8% 40px; text-align:center;">
-  <h1 style="font-size:48px; margin-bottom:20px; color:#111827;">Notes</h1>
-  <p style="max-width:750px; margin:0 auto; font-size:18px; color:#4b5563;">
-    Store your HTML tags, structure, and examples here. Keep your styling shortcuts, selectors, and layouts organized. Save logic, functions, and DOM tips for quick revision.
-  </p>
+<style>
+  .notes-hero{
+    padding:70px 8% 25px;
+    text-align:center;
+  }
+
+  .notes-hero h1{
+    font-size:46px;
+    color:#111827;
+    margin-bottom:12px;
+  }
+
+  .notes-hero p{
+    color:#6b7280;
+    font-size:18px;
+    max-width:720px;
+    margin:0 auto;
+  }
+
+  .panel-actions{
+    padding:10px 8% 20px;
+    text-align:center;
+  }
+
+  .notes-grid{
+    padding:10px 8% 60px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:24px;
+  }
+
+  .note-card{
+    background:#ffffff;
+    border-radius:18px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.08);
+    overflow:hidden;
+    transition:0.3s;
+  }
+
+  .note-card:hover{
+    transform:translateY(-6px);
+  }
+
+  .note-image{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    object-position:center;
+    background:#f3f4f6;
+    display:block;
+  }
+
+  .note-body{
+    padding:22px;
+  }
+
+  .note-body h3{
+    color:#111827;
+    margin-bottom:10px;
+    font-size:22px;
+  }
+
+  .note-body p{
+    color:#6b7280;
+    font-size:15px;
+    margin-bottom:16px;
+  }
+
+  .note-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .small-btn{
+    padding:10px 14px;
+    border-radius:10px;
+    text-decoration:none;
+    color:#fff;
+    background:#f59e0b;
+    display:inline-block;
+  }
+
+  .small-btn.red{
+    background:#ef4444;
+  }
+
+  .small-btn.gray{
+    background:#6b7280;
+  }
+
+  .empty-card{
+    grid-column:1/-1;
+    text-align:center;
+    padding:30px;
+    background:#ffffff;
+    border-radius:18px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.08);
+  }
+</style>
+
+<section class="notes-hero">
+  <h1>My Notes</h1>
+  <p>Save your notes, upload a photo, update them anytime, and download the attached image.</p>
 </section>
 
-<section class="courses" style="padding:20px 8% 60px;">
-  <div class="course-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:25px;">
-    <div class="card" style="background:white; padding:25px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,0.08);">
-      <h3 style="margin-bottom:10px; color:#111827;">HTML Notes</h3>
-      <p style="color:#6b7280;">Store important tags and examples.</p>
+<div class="panel-actions">
+  <a href="{% url 'add_note' %}" class="btn">Add Note</a>
+</div>
+
+<section class="notes-grid">
+  {% for note in notes_list %}
+    <div class="note-card">
+      {% if note.image %}
+        <img src="{{ note.image.url }}" alt="{{ note.title }}" class="note-image">
+      {% else %}
+        <div class="note-image" style="display:flex;align-items:center;justify-content:center;color:#9ca3af;">
+          No Image
+        </div>
+      {% endif %}
+
+      <div class="note-body">
+        <h3>{{ note.title }}</h3>
+        <p>{{ note.description }}</p>
+
+        <div class="note-actions">
+          <a href="{% url 'update_note' note.id %}" class="small-btn">Update</a>
+          <a href="{% url 'delete_note' note.id %}" class="small-btn red">Delete</a>
+          {% if note.image %}
+            <a href="{% url 'download_note_image' note.id %}" class="small-btn gray">Download</a>
+          {% endif %}
+        </div>
+      </div>
     </div>
-    <div class="card" style="background:white; padding:25px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,0.08);">
-      <h3 style="margin-bottom:10px; color:#111827;">CSS Notes</h3>
-      <p style="color:#6b7280;">Keep your layout and styling tricks here.</p>
+  {% empty %}
+    <div class="empty-card">
+      <h3>No notes yet</h3>
+      <p>Create your first note using the Add Note button.</p>
     </div>
-    <div class="card" style="background:white; padding:25px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,0.08);">
-      <h3 style="margin-bottom:10px; color:#111827;">JavaScript Notes</h3>
-      <p style="color:#6b7280;">Save logic, functions, and DOM tips.</p>
-    </div>
-    <div class="card" style="background:white; padding:25px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,0.08);">
-      <h3 style="margin-bottom:10px; color:#111827;">Python Notes</h3>
-      <p style="color:#6b7280;">Track syntax, loops, functions, and practice code.</p>
-    </div>
-  </div>
+  {% endfor %}
 </section>
 {% endblock body %}
