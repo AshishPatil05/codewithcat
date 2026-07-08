@@ -1,38 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Home Page{% endblock title %}
+{% block title %}Home - Code With Cat{% endblock title %}
+
 {% block body %}
-<section class="hero">
-    <div class="hero-text">
-      <h1>Learn Coding One Paw at a Time</h1>
-      <p>Code With Cat helps beginners learn web development, Python, JavaScript, and more through easy lessons and fun projects.</p>
-      <a href="/course" class="btn">Explore Courses</a>
-    </div>
-    <div class="hero-img">😼💻</div>
-  </section>
+<section class="hero" style="padding:80px 8%; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+  <div class="hero-text" style="max-width:550px;">
+    <h1 style="font-size:52px; margin-bottom:20px; color:#111827;">Learn Coding With Code With Cat</h1>
+    <p style="font-size:18px; margin-bottom:25px; color:#4b5563;">
+      Code With Cat helps beginners learn web development, Python, JavaScript, and more through easy lessons and fun projects.
+    </p>
+    <a href="{% url 'course' %}" class="btn">Explore Courses</a>
+  </div>
 
-  <section class="courses">
-    <h2>Popular Courses</h2>
-    <div class="course-grid">
-      <div class="card">
-        <h3>Python Basics</h3>
-        <p>Start coding with beginner-friendly Python lessons.</p>
-      </div>
-      <div class="card">
-        <h3>Web Development</h3>
-        <p>Learn HTML, CSS, and JavaScript to build websites.</p>
-      </div>
-      <div class="card">
-        <h3>Java Programming</h3>
-        <p>Understand object-oriented programming step by step.</p>
-      </div>
-      <div class="card">
-        <h3>C Language</h3>
-        <p>Build strong programming fundamentals from scratch.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <p>© 2026 Code With Cat | Built for learning and fun</p>
-  </footer>
+  <div class="hero-img" style="font-size:120px;">😺</div>
+</section>
 {% endblock body %}
