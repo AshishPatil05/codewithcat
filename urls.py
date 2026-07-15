@@ -22,8 +22,20 @@ admin.site.site_title = "CWC Admin Portal"
 admin.site.index_title = "Welcome to Code With Cat Portal"
 
 urlpatterns = [
+<<<<<<< HEAD:codewithcat/urls.py
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
+=======
+    path('', views.home,name='home'),
+    path('home', views.home,name='home'),
+    path('aboutus',views.aboutus,name='aboutus'),
+    path('contact',views.contact,name='contact'),
+    path('course',views.course,name='course'),
+    path('notes',views.notes,name='notes')
+
+
+    
+>>>>>>> 5cd486e (Added Notes page):codewithcat/home/urls.py
 ]
 from django.conf import settings
 from django.conf.urls.static import static

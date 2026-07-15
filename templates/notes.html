@@ -1,146 +1,260 @@
-{% extends "base.html" %}
-{% block title %}My Notes - Code With Cat{% endblock title %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Page - Code With Cat</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
 
-{% block body %}
-<style>
-  .notes-hero{
-    padding:70px 8% 25px;
-    text-align:center;
-  }
+    body{
+      background:#fffaf3;
+      color:#222;
+      line-height:1.6;
+    }
 
-  .notes-hero h1{
-    font-size:46px;
-    color:#111827;
-    margin-bottom:12px;
-  }
+    .navbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 8%;
+      background:#1f2937;
+      color:white;
+      position:sticky;
+      top:0;
+      flex-wrap:wrap;
+      gap:15px;
+    }
 
-  .notes-hero p{
-    color:#6b7280;
-    font-size:18px;
-    max-width:720px;
-    margin:0 auto;
-  }
+    .logo{
+      font-size:28px;
+      font-weight:bold;
+      color:#f59e0b;
+    }
 
-  .panel-actions{
-    padding:10px 8% 20px;
-    text-align:center;
-  }
+    .nav-links{
+      display:flex;
+      list-style:none;
+      gap:20px;
+      flex-wrap:wrap;
+    }
 
-  .notes-grid{
-    padding:10px 8% 60px;
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-    gap:24px;
-  }
+    .nav-links a{
+      color:white;
+      text-decoration:none;
+      font-size:16px;
+      transition:0.3s;
+    }
 
-  .note-card{
-    background:#ffffff;
-    border-radius:18px;
-    box-shadow:0 10px 28px rgba(0,0,0,0.08);
-    overflow:hidden;
-    transition:0.3s;
-  }
+    .nav-links a:hover,
+    .nav-links a.active{
+      color:#f59e0b;
+    }
 
-  .note-card:hover{
-    transform:translateY(-6px);
-  }
+    .btn{
+      background:#f59e0b;
+      color:white;
+      padding:10px 18px;
+      border:none;
+      border-radius:8px;
+      text-decoration:none;
+      transition:0.3s;
+      display:inline-block;
+    }
 
-  .note-image{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    object-position:center;
-    background:#f3f4f6;
-    display:block;
-  }
+    .btn:hover{
+      background:#d97706;
+    }
 
-  .note-body{
-    padding:22px;
-  }
+    .hero{
+      padding:80px 8% 40px;
+      text-align:center;
+    }
 
-  .note-body h3{
-    color:#111827;
-    margin-bottom:10px;
-    font-size:22px;
-  }
+    .hero h1{
+      font-size:48px;
+      margin-bottom:20px;
+      color:#111827;
+    }
 
-  .note-body p{
-    color:#6b7280;
-    font-size:15px;
-    margin-bottom:16px;
-  }
+    .hero p{
+      max-width:750px;
+      margin:0 auto;
+      font-size:18px;
+      color:#4b5563;
+    }
 
-  .note-actions{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-  }
+    .courses,
+    .notes{
+      padding:20px 8% 60px;
+    }
 
-  .small-btn{
-    padding:10px 14px;
-    border-radius:10px;
-    text-decoration:none;
-    color:#fff;
-    background:#f59e0b;
-    display:inline-block;
-  }
+    .courses h2,
+    .notes h2{
+      text-align:center;
+      font-size:36px;
+      margin-bottom:40px;
+      color:#111827;
+    }
 
-  .small-btn.red{
-    background:#ef4444;
-  }
+    .course-grid,
+    .note-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:25px;
+    }
 
-  .small-btn.gray{
-    background:#6b7280;
-  }
+    .card{
+      background:white;
+      padding:25px;
+      border-radius:16px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.08);
+      transition:0.3s;
+    }
 
-  .empty-card{
-    grid-column:1/-1;
-    text-align:center;
-    padding:30px;
-    background:#ffffff;
-    border-radius:18px;
-    box-shadow:0 10px 28px rgba(0,0,0,0.08);
-  }
-</style>
+    .card:hover{
+      transform:translateY(-8px);
+    }
 
-<section class="notes-hero">
-  <h1>My Notes</h1>
-  <p>Save your notes, upload a photo, update them anytime, and download the attached image.</p>
-</section>
+    .card h3{
+      margin-bottom:10px;
+      color:#111827;
+    }
 
-<div class="panel-actions">
-  <a href="{% url 'add_note' %}" class="btn">Add Note</a>
-</div>
+    .card p{
+      color:#6b7280;
+    }
 
-<section class="notes-grid">
-  {% for note in notes_list %}
-    <div class="note-card">
-      {% if note.image %}
-        <img src="{{ note.image.url }}" alt="{{ note.title }}" class="note-image">
-      {% else %}
-        <div class="note-image" style="display:flex;align-items:center;justify-content:center;color:#9ca3af;">
-          No Image
-        </div>
-      {% endif %}
+    .note-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:15px;
+    }
 
-      <div class="note-body">
-        <h3>{{ note.title }}</h3>
-        <p>{{ note.description }}</p>
+    .small-btn{
+      background:#e5e7eb;
+      color:#111827;
+      padding:8px 12px;
+      border-radius:8px;
+      text-decoration:none;
+      display:inline-block;
+      font-size:14px;
+    }
 
+    .small-btn:hover{
+      background:#d1d5db;
+    }
+
+    .footer{
+      text-align:center;
+      padding:25px;
+      background:#1f2937;
+      color:white;
+      margin-top:40px;
+    }
+
+    @media(max-width:768px){
+      .navbar{
+        flex-direction:column;
+        text-align:center;
+      }
+
+      .hero h1{
+        font-size:36px;
+      }
+
+      .nav-links{
+        justify-content:center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">😼 Code With Cat</div>
+    <ul class="nav-links">
+      <li><a href="/home">Home</a></li>
+      <li><a href="/course" class="active">Courses</a></li>
+      <li><a href="/notes">Notes</a></li>
+      <li><a href="/aboutus">About us</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+    <a href="/notes" class="btn">Start Learning</a>
+  </nav>
+
+  <section class="hero">
+    <h1>Our Courses</h1>
+    <p>Use this course page with the same navbar style from your contact file. It keeps the design simple and matches the Code With Cat theme.</p>
+  </section>
+
+  <section class="courses" id="courses">
+    <h2>Popular Courses</h2>
+    <div class="course-grid">
+      <div class="card">
+        <h3>HTML & CSS</h3>
+        <p>Learn the basics of web structure and styling.</p>
+      </div>
+      <div class="card">
+        <h3>JavaScript</h3>
+        <p>Add interactivity to your website with simple scripts.</p>
+      </div>
+      <div class="card">
+        <h3>Python</h3>
+        <p>Start programming with easy syntax and useful examples.</p>
+      </div>
+      <div class="card">
+        <h3>C Programming</h3>
+        <p>Build a strong foundation in logic and problem solving.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="notes" id="notes-management">
+    <h2>Manage Notes</h2>
+    <div class="note-grid">
+      <div class="card">
+        <h3>HTML Notes</h3>
+        <p>Store your HTML tags, structure, and examples here.</p>
         <div class="note-actions">
-          <a href="{% url 'update_note' note.id %}" class="small-btn">Update</a>
-          <a href="{% url 'delete_note' note.id %}" class="small-btn red">Delete</a>
-          {% if note.image %}
-            <a href="{% url 'download_note_image' note.id %}" class="small-btn gray">Download</a>
-          {% endif %}
+          <a href="#" class="small-btn">Add Note</a>
+          <a href="#" class="small-btn">View Notes</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>CSS Notes</h3>
+        <p>Keep your styling shortcuts, selectors, and layouts organized.</p>
+        <div class="note-actions">
+          <a href="#" class="small-btn">Add Note</a>
+          <a href="#" class="small-btn">View Notes</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>JavaScript Notes</h3>
+        <p>Save logic, functions, and DOM tips for quick revision.</p>
+        <div class="note-actions">
+          <a href="#" class="small-btn">Add Note</a>
+          <a href="#" class="small-btn">View Notes</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Python Notes</h3>
+        <p>Track Python syntax, loops, functions, and practice code.</p>
+        <div class="note-actions">
+          <a href="#" class="small-btn">Add Note</a>
+          <a href="#" class="small-btn">View Notes</a>
         </div>
       </div>
     </div>
-  {% empty %}
-    <div class="empty-card">
-      <h3>No notes yet</h3>
-      <p>Create your first note using the Add Note button.</p>
-    </div>
-  {% endfor %}
-</section>
-{% endblock body %}
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 Code With Cat | Course Page</p>
+  </footer>
+</body>
+</html>
